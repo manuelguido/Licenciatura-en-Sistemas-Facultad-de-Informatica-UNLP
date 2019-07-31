@@ -1,0 +1,1 @@
+PARSELY.pInit({"apikey":"dzone.com","bundle":"/code/ptrack-v1.1.1-engagedtime.js","customizations":null,"track_third_party_cookies":true,"track_ip_addresses":true,"settings":{"tracker":true,"widget":false,"debug":false},"uuid":"06fea37a-c80a-4d7d-97f9-23993627589f","network_uuid":"3c26043a-1f22-4c7a-bb05-de01039388f6","apikey_uuid":"06fea37a-c80a-4d7d-97f9-23993627589f"});
