@@ -1,0 +1,49 @@
+Los patrones estructurales se ocupan de cómo se componen las clases y los objetos para formar estructuras mas grandes. Los patrones de clase estructurales utilizan la herencia para componer interfaces o implementaciones. El resultado es una clase que combina las propiedades de su clase padre. Este patrón es particularmente útil para hacer clases desarrolladas independientemente. En general, un adaptador hace que una interfaz (la adaptada) se ajuste a otra, proporcionando así una abstracción uniforme de diferentes interfaces en un adaptador de clase que cumple esto heredando de forma privada de una clase adaptada. El adaptador entonces expresa su interfaz en términos de los adaptados.
+
+Utilice el patrón adaptador cuando:
+• desea utilizar una clase existente y su interfaz no coincide con la que necesita.
+• desea crear una clase reutilizable que coopere con clases no relacionadas o imprevistas, es decir, clases que no necesariamente tienen interfaces compatibles.
+• (solo adaptador de objetos) necesita usar varias subclases existentes, pero no es práctico adaptar su intercomunicación subclasificando cada una. Un adaptador de objetos puede adaptar la interfaz de su clase padre.
+
+
+
+
+En el diagrama que ilustra el caso del adaptador con objetos. Muestra como las solicitudes de BoundingBox, declarado en la clase Shape, se convierten en GetExtent definidias en TextView, entonces el eidutor puede reutilizar la clase TextView que es incompatible. Un adaptador de objeto se basa en la composición del objeto.
+
+
+Un adaptador de clase usa herencia múltiple para adaptar una interfaz a otra
+
+
+
+
+
+Los adaptadores de clase y objeto tienen diferentes ventajas y desventajas. 
+Un adaptador de clase: 
+• adapta Adaptee to Target comprometiéndose con una clase de Adaptee concreta. Como consecuencia, un adaptador de clase no funcionará cuando queremos adaptar una clase y todas sus subclases.
+• permite que el adaptador anule parte del comportamiento de Adaptee, ya que el adaptador es una subclase de Adaptee.
+• introduce solo un objeto, y no se necesita una indirección de puntero adicional para llegar al adaptador.
+
+Un adaptador de objeto:
+• permite que un solo Adaptador funcione con muchos Adaptees, es decir, el propio Adaptee y todas sus subclases (si las hay). El adaptador también puede agregar funcionalidad a todos los Adaptees a la vez.
+• hace que sea más difícil anular el comportamiento de Adaptee. Requerirá subclasificar Adaptee y hacer que el Adaptador se refiera a la subclase en lugar del Adaptee mismo.
+
+ejercicio 4
+
+
+Defina el esqueleto de un algoritmo en una operación, aplazando algunos pasos a las subclases. El método de plantilla permite a las subclases redefinir ciertos pasos de un algoritmo sin cambiar la estructura del algoritmo.
+
+Un método Hook es uno en la clase abstracta que declara el comportamiento de un mensaje y le proporciona una implementación predeterminada. A veces lo predeterminado es simplemente no hacer nada. Las subclases pueden subimplementar el método para cambiar este valor predeterminado.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

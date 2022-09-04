@@ -1,0 +1,530 @@
+Object subclass: #Empleado
+	instanceVariableNames: 'nombre salario diasVacaciones licencias'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'OORedictado - Parcial 2'!
+
+!Empleado methodsFor: 'initialization' stamp: 'Matias 6/13/2019 09:35'!
+initialize
+
+	super initialize.
+
+	diasVacaciones := nil.
+	licencias := OrderedCollection  new.
+	nombre := nil.
+	salario := nil.! !
+
+!Empleado methodsFor: 'initialization' stamp: 'Matias 6/13/2019 12:04'!
+generarReciboSueldo
+	"Nombre: <Nombre de Empleado>
+Salario $ <Monto de Salario>
+Beneficio Vacaciones <cantidad días> _ $ <monto por vacaciones> 
+Días sin goce -$ <Monto por días sin goce>
+Total: $ <Total a pagar>"
+
+	| total impacto salarioFinal|
+	Transcript  show: 'Nombre:', nombre;cr.
+	Transcript
+		show: ('Salario: $' , salario asString );cr.
+	
+	
+	licencias do: [ :licencia |  
+			impacto:=licencia impactoDeSalario: self.
+			Transcript show: (licencia detalle, ' ',licencia cantidadDias asString,  ' _ $', impacto asString );cr ].
+	total := licencias sumNumbers: [ :licencia | licencia impactoDeSalario: self ].
+	salarioFinal:= salario + total.
+	Transcript show: ('Total:' , salarioFinal asString).! !
+
+!Empleado methodsFor: 'initialization' stamp: 'Matias 6/12/2019 23:38'!
+initialize:vacaciones nombre:unNombre salario:unSalario
+
+	super initialize.
+
+	diasVacaciones := vacaciones.
+	licencias := OrderedCollection new.
+	name := unNombre .
+	salario := unSalario.! !
+
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:20'!
+diasVacaciones
+	^ diasVacaciones! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:20'!
+diasVacaciones: anObject
+	diasVacaciones := anObject! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/14/2019 17:54'!
+totalVacacionesYDiasLibres
+
+^(self licencias select:[:licencia| licencia esSinGoce not]) sumNumbers:[:licencia| licencia cantidadDias].! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:20'!
+salario: anObject
+	salario := anObject! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:19'!
+licencias
+^licencias! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:21'!
+nombre: anObject
+	nombre := anObject! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:21'!
+nombre
+	^ nombre! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/19/2019 17:38'!
+totalLicencias
+
+^(self licencias sumNumbers: [:licencia| licencia cantidadDias ]).! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:20'!
+salario
+	^ salario! !
+
+!Empleado methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:20'!
+licencias: anObject
+	licencias := anObject! !
+
+
+!Empleado methodsFor: 'as yet unclassified' stamp: 'Matias 6/12/2019 23:36'!
+registrarLicencia:l
+
+licencias add:l! !
+
+!Empleado methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 11:23'!
+tieneLicenciaEsteMes
+|esteMes|
+
+esteMes:=Date today month.
+self licenciasDiasLibres detect: [ :licencia|  licencia fecha month = esteMes]  ifFound:[^true]  ifNone:[^false] ! !
+
+!Empleado methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 11:24'!
+tieneCincoLicencias
+	"determina si tiene 5 licencias off"
+|anoAtras hoy licenciasOff|
+anoAtras:= Date today subtractDays: 365.
+
+hoy:=Date today.	
+licenciasOff:=self licenciasDiasLibres   select:[:licencia| licencia fecha between:  anoAtras and:hoy ]	.
+^ licenciasOff size = 5.
+
+! !
+
+!Empleado methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 11:23'!
+licenciasDiasLibres
+^ licencias select:[:licencia| licencia esLicenciaLibre ]! !
+
+
+Object subclass: #Licencia
+	instanceVariableNames: 'cantidadDias fecha empleado'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'OORedictado - Parcial 2'!
+
+!Licencia methodsFor: 'as yet unclassified' stamp: 'Matias 6/14/2019 17:52'!
+validarYAgregar:unEmpleado
+
+(self validar:  unEmpleado) ifTrue:[
+	unEmpleado registrarLicencia:self.
+	^true
+		].! !
+
+!Licencia methodsFor: 'as yet unclassified' stamp: 'Matias 6/12/2019 23:19'!
+impactoDeSalario:empleado
+self subclassResponsibility ! !
+
+!Licencia methodsFor: 'as yet unclassified' stamp: 'Matias 6/12/2019 23:09'!
+validar:dias para:empleado
+	self subclassResponsibility .! !
+
+
+!Licencia methodsFor: 'accessing' stamp: 'Matias 6/13/2019 09:41'!
+fecha
+^fecha! !
+
+!Licencia methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:18'!
+esSinGoce
+^false! !
+
+!Licencia methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:18'!
+cantidadDias
+^cantidadDias! !
+
+!Licencia methodsFor: 'accessing' stamp: 'Matias 6/13/2019 09:39'!
+esLicenciaLibre
+^false! !
+
+
+!Licencia methodsFor: 'initialization' stamp: 'Matias 6/14/2019 17:49'!
+initialize:diasSolicitados de:unEmpleado
+
+	super initialize.
+
+	cantidadDias := diasSolicitados.
+	fecha:=Date today.
+	empleado:=unEmpleado.! !
+
+!Licencia methodsFor: 'initialization' stamp: 'Matias 6/13/2019 09:41'!
+initialize:diasSolicitados
+
+	super initialize.
+
+	cantidadDias := diasSolicitados.
+	fecha:=Date today.! !
+
+!Licencia methodsFor: 'initialization' stamp: 'Matias 6/13/2019 10:12'!
+detalle
+self subclassResponsibility ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+Licencia class
+	instanceVariableNames: ''!
+
+!Licencia class methodsFor: 'instance creation' stamp: 'Matias 6/14/2019 17:48'!
+new:dias de:unEmpleado
+^super new initialize:dias de:unEmpleado ! !
+
+
+Licencia subclass: #DiasLibres
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'OORedictado - Parcial 2'!
+!DiasLibres commentStamp: '<historical>' prior: 0!
+Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+
+For the Class part:  State a one line summary. For example, "I represent a paragraph of text".
+
+For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
+
+For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
+
+Public API and Key Messages
+
+- message one   
+- message two 
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+ 
+Internal Representation and Key Implementation Points.
+
+
+    Implementation Points!
+
+
+!DiasLibres methodsFor: 'accessing' stamp: 'Matias 6/13/2019 09:39'!
+esLicenciaLibre
+^true.! !
+
+
+!DiasLibres methodsFor: 'initialization' stamp: 'Matias 6/13/2019 10:12'!
+detalle
+^'Dias libres'! !
+
+
+!DiasLibres methodsFor: 'as yet unclassified' stamp: 'Matias 6/12/2019 23:25'!
+impactoDeSalario: empleado
+	"
+No impactan en el salario.
+"
+	
+^0! !
+
+!DiasLibres methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 10:09'!
+validar:empleado
+"Son días libres por convenio y solo se puede pedir 1 día por mes y no pueden superar 5 al año."
+
+^empleado tieneCincoLicencias not and: (empleado tieneLicenciaEsteMes not and: cantidadDias  = 1)
+	! !
+
+
+Object subclass: #LiquidadorSueldos
+	instanceVariableNames: 'empleados'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'OORedictado - Parcial 2'!
+!LiquidadorSueldos commentStamp: '<historical>' prior: 0!
+Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+
+For the Class part:  State a one line summary. For example, "I represent a paragraph of text".
+
+For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
+
+For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
+
+Public API and Key Messages
+
+- message one   
+- message two 
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+ 
+Internal Representation and Key Implementation Points.
+
+
+    Implementation Points!
+
+
+!LiquidadorSueldos methodsFor: 'initialization' stamp: 'Matias 6/13/2019 09:19'!
+initialize
+
+	super initialize.
+
+	empleados := OrderedCollection new.! !
+
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/14/2019 17:53'!
+solicitaDiasLibres: unaCantidadDias para: unEmpleado
+"unEmpleado solicita unaCantidadDias libres. Se valida si el pedido corresponde según las reglas. Si puede tomarse esos días se registra y devuelve true. En caso contrario, no registra nada y devuelve false"
+	| l |
+
+l:=DiasLibres new: unaCantidadDias de:unEmpleado .
+ ^self validarYAgregar:l de:unEmpleado 
+! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 07:12'!
+diasLicenciaTomados
+"devuelve la cantidad de días de licencia tomados por todo concepto"
+
+^self empleados sumNumbers: [ :empleado| empleado totalLicencias ].
+
+
+
+
+
+	! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/14/2019 17:59'!
+salariosBajoPromedio
+"Devuelve una lista de empleados cuyo salario es inferior al promedio de todos los salarios"
+
+|promedio tamano|
+tamano:=self empleados size.
+promedio:=(self empleados sumNumbers: [ :empleado | empleado salario  ])/tamano  .
+^self empleados select:[:empleado| empleado salario <promedio].
+
+
+	! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/14/2019 17:50'!
+validarYAgregar:l de:unEmpleado
+
+
+	
+ ^l validarYAgregar: unEmpleado.
+
+! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 07:22'!
+generaReciboSueldo: unEmpleado. 
+"al final del mes se genera un recibo de sueldo para unEmpleado y se aplican los incrementos y descuentos a partir de las licencias solicitadas en ese mes. Imprime en Transcript el reporte del recibo de la siguiente manera. Tenga en cuenta que las licencias de un mismo tipo se podrían repetir en el mes y en tal caso se imprime un renglón por cada una.
+
+Nombre: <Nombre de Empleado>
+Salario $ <Monto de Salario>
+Beneficio Vacaciones <cantidad días> _ $ <monto por vacaciones> 
+Días sin goce -$ <Monto por días sin goce>
+Total: $ <Total a pagar>"
+
+unEmpleado generarReciboSueldo.
+
+
+	! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 07:16'!
+empleadosConLicenciaDisponible
+"Devuelve una lista de todos los empleados y la cantidad de dias de licencia disponible para cada uno, considerando la suma de las vacaciones con los días libres"
+
+|diccionario|
+diccionario:=Dictionary new.
+self empleados do:[:empleado|
+	diccionario at:empleado put: empleado totalVacacionesYDiasLibres.
+	]
+
+
+! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 09:18'!
+agregarEmpleado: anEmpleado 
+empleados add:anEmpleado ! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/14/2019 17:52'!
+solicitaDiasSinGoce: unaCantidadDias para: unEmpleado
+"unEmpleado solicita unaCantidadDias sin goce de sueldo. Se valida si el pedido corresponde según las reglas. Si puede tomarse esos días se registra y devuelve true. En caso contrario, no registra nada y devuelve false"
+
+
+| l |
+l:=SinGoce  new: unaCantidadDias de:unEmpleado .
+ ^self validarYAgregar:l de:unEmpleado 
+	! !
+
+!LiquidadorSueldos methodsFor: 'as yet unclassified' stamp: 'Matias 6/14/2019 17:52'!
+solicitaVacaciones: unaCantidadDias para: unEmpleado
+	"unEmpleado solicita unaCantidadDias de vacaciones. Se valida si el pedido corresponde según las reglas. Si puede tomarse esas vacaciones se registra y devuelve true. En caso contrario, no registra nada y devuelve false"
+
+	| l |
+
+l:=Vacaciones new: unaCantidadDias de:unEmpleado .
+ ^self validarYAgregar:l de:unEmpleado ! !
+
+
+!LiquidadorSueldos methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:12'!
+empleados
+^empleados
+
+
+
+
+
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+LiquidadorSueldos class
+	instanceVariableNames: 'empleados'!
+
+!LiquidadorSueldos class methodsFor: 'as yet unclassified' stamp: 'Matias 6/19/2019 17:36'!
+playground
+"	1- Crear un Empleado con 15 días de vacaciones disponibles y un sueldo de $15.000.
+2- Registre una solicitud de 10 días de vacaciones.
+3- Registre una solicitud de 10 días sin goce.
+4- Registre una solicitud de 1 día off.
+5- Genere e imprima el recibo de sueldo. "
+
+|empleado ls|
+empleado:=Empleado new nombre:'Juan'; diasVacaciones: 15;salario: 15000.
+ls:=LiquidadorSueldos new.
+ls agregarEmpleado: empleado.
+
+ls solicitaVacaciones: 10 para:empleado.
+ls solicitaDiasSinGoce: 10 para: empleado.
+ls solicitaDiasLibres: 1 para:empleado.
+ls generaReciboSueldo: empleado. 
+empleado totalVacacionesYDiasLibres.
+ls diasLicenciaTomados.
+! !
+
+
+TestCase subclass: #LiquidadorSueldosTestCase
+	instanceVariableNames: 'empleado ls'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'OORedictado - Parcial 2'!
+
+!LiquidadorSueldosTestCase methodsFor: 'initialization' stamp: 'Matias 6/19/2019 17:27'!
+testEmpleadosConLicenciaDisponible
+
+ls empleadosConLicenciaDisponible
+! !
+
+!LiquidadorSueldosTestCase methodsFor: 'initialization' stamp: 'Matias 6/19/2019 17:27'!
+testDiasLicenciaTomados
+
+ls diasLicenciaTomados
+! !
+
+!LiquidadorSueldosTestCase methodsFor: 'initialization' stamp: 'Matias 6/14/2019 17:56'!
+testGenerarRecibo
+
+ls generaReciboSueldo: empleado. 
+
+! !
+
+!LiquidadorSueldosTestCase methodsFor: 'initialization' stamp: 'Matias 6/19/2019 17:26'!
+testSalarioBajoPromedio
+
+ls salariosBajoPromedio
+! !
+
+!LiquidadorSueldosTestCase methodsFor: 'initialization' stamp: 'Matias 6/14/2019 17:56'!
+setUp
+
+empleado:=Empleado new nombre:'Juan'; diasVacaciones: 15;salario: 15000.
+ls:=LiquidadorSueldos new.
+ls agregarEmpleado: empleado.
+ls solicitaVacaciones: 10 para:empleado.
+ls solicitaDiasSinGoce: 10 para: empleado.
+ls solicitaDiasLibres: 1 para:empleado.
+
+! !
+
+
+Licencia subclass: #SinGoce
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'OORedictado - Parcial 2'!
+
+!SinGoce methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 10:15'!
+impactoDeSalario: empleado
+	"En tal caso se descontarán los días solicitados del sueldo. Por ejemplo, para 10 días libres sin goce, se descontarán sueldo/30 días x 10 días solicitados."
+	
+^empleado salario/30 *cantidadDias * -1! !
+
+!SinGoce methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 09:22'!
+validar:empleado
+"Los empleados por motivos personales pueden solicitar sin restricción días libres sin goce."
+^true! !
+
+
+!SinGoce methodsFor: 'accessing' stamp: 'Matias 6/13/2019 07:19'!
+esSinGoce
+^false! !
+
+
+!SinGoce methodsFor: 'initialization' stamp: 'Matias 6/13/2019 10:13'!
+detalle
+^'Dias sin goce de sueldo'.! !
+
+
+Licencia subclass: #Vacaciones
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'OORedictado - Parcial 2'!
+!Vacaciones commentStamp: '<historical>' prior: 0!
+Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+
+For the Class part:  State a one line summary. For example, "I represent a paragraph of text".
+
+For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
+
+For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
+
+Public API and Key Messages
+
+- message one   
+- message two 
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+ 
+Internal Representation and Key Implementation Points.
+
+
+    Implementation Points!
+
+
+!Vacaciones methodsFor: 'initialization' stamp: 'Matias 6/13/2019 10:13'!
+detalle
+^'Vacaciones'! !
+
+
+!Vacaciones methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 10:24'!
+impactoDeSalario: empleado
+
+	"Impactan en el salario pagando un adicional del 30% en cada día de licencia. Por ejemplo. Si me tomo 1 semana de vacaciones. Se liquidará el sueldo del mes con el siguiente incremento:
+sueldo/30 días x 7 días de vacaciones x 30%."
+
+^empleado salario/30 *cantidadDias * 0.3! !
+
+!Vacaciones methodsFor: 'as yet unclassified' stamp: 'Matias 6/13/2019 10:23'!
+validar:empleado
+"Las vacaciones pueden ocurrir en cualquier momento del año. El número de días no puede superar a los días disponibles por el empleado."
+
+^empleado diasVacaciones  >=cantidadDias .! !

@@ -1,0 +1,1 @@
+Ejemplo desarrollado en clase. (mini)Browser de clases web. Ver el método de clase #initialize (si, un initialize de clase) de la clase WebSystemBrowserComponent que registra la aplicación en el servidor. El mensaje #initialize se envia a la clase luego de que se hizo el file-in de la misma.
