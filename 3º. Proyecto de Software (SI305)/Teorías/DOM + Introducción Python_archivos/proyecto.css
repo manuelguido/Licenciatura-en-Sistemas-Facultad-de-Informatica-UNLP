@@ -1,0 +1,29 @@
+.reveal {
+  font-size: 30px;
+ }
+.reveal h1 {
+  font-size: 1.77em; }
+  
+ 
+ .reveal h2 {
+  font-size: 1.57em; 
+  text-transform: none;
+  line-height: 3;
+  
+  }
+  
+   .reveal h3 {
+  font-size: 1.37em; 
+  text-transform: none;
+  line-height: 3;
+  }
+  
+.reveal strong {
+  color:#B0B02B;
+}
+
+img[alt=HTMLsemantico] { width: 600px; }
+
+.reveal section img {
+	border: 0px
+}

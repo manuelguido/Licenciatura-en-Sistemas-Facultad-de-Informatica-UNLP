@@ -1,0 +1,32 @@
+<Schema name="Grupo_X">
+<Dimension visible="true" name="Pelicula">
+<Hierarchy visible="true" hasAll="true" primaryKey="pk">
+<Table name="dim_film"></Table>
+<level name="Titulo" column="titulo"/>
+</Hierarchy>
+</Dimension>
+<Dimension visible="true" name="Tiempo">
+<Hierarchy visible="true" hasAll="true" primaryKey="periodo">
+<Table name="dim_tiempo"></Table>
+<level name="Año" column="anio"/>
+<level name="Mes" column="mes"/>
+</Hierarchy>
+</Dimension>
+<cube name="Alquileres">
+<Table name="fact_alquileres"></Table>
+<dimensionUsage name="Pelicula" source="Pelicula" foreignKey="pk_film"/>
+<dimensionUsage name="Tiempo" source="Tiempo" foreignKey="periodo"/>
+<Measure name="#aliquileres" column="rental_id" aggregator="distinct count" dataType="Integer"/>
+<Measure name="Monto" column="amount" aggregator="sum" dataType="Numeric"/>
+</cube>
+<!--
+
+  <cube name="Actores">
+      <Table name="fact_actores">
+      </Table>  
+
+
+  </cube>
+  
+-->
+</Schema>
